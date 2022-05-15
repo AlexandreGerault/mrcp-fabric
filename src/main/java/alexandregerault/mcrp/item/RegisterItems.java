@@ -17,6 +17,9 @@ public class RegisterItems {
             -2.0f,
             new FabricItemSettings().group(ItemGroup.COMBAT).fireproof().rarity(Rarity.EPIC)
     );
+
+    public static final Item KEY_ITEM = new KeyItem(new FabricItemSettings().group(ItemGroup.MISC));
+
     private final ILogger logger;
 
     public RegisterItems(ILogger logger) {
@@ -27,5 +30,7 @@ public class RegisterItems {
         logger.info("Registering items");
         Registry.register(Registry.ITEM, new Identifier(MinecraftRolePlay.MOD_ID, "cornucopia_item"), CORNUCOPIA_ITEM);
         Registry.register(Registry.ITEM, new Identifier(MinecraftRolePlay.MOD_ID, "legendary_sword_item"), LEGENDARY_SWORD_ITEM);
+        Registry.register(Registry.ITEM, new Identifier(MinecraftRolePlay.MOD_ID, "key_item"), KEY_ITEM);
+        logger.info("Items registered successfully");
     }
 }
