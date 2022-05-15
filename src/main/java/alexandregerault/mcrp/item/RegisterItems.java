@@ -2,6 +2,7 @@ package alexandregerault.mcrp.item;
 
 import alexandregerault.mcrp.ILogger;
 import alexandregerault.mcrp.MinecraftRolePlay;
+import alexandregerault.mcrp.lock.KeyItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
