@@ -3,6 +3,7 @@ package alexandregerault.mcrp.lock;
 import alexandregerault.mcrp.MinecraftRolePlay;
 import alexandregerault.mcrp.lock.mixin.MixinDoorBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,24 +39,46 @@ public class KeyItem extends Item {
             return super.useOnBlock(context);
         }
 
+        BlockPos otherHalfPos = world.getBlockState(context.getBlockPos()).get(net.minecraft.state.property.Properties.DOUBLE_BLOCK_HALF).equals(DoubleBlockHalf.UPPER)
+                ? context.getBlockPos().offset(Direction.Axis.Y, -1)
+                : context.getBlockPos().offset(Direction.Axis.Y, 1);
+        BlockState otherHalf = world.getBlockState(otherHalfPos);
+
         if (nbt != null && hasAlreadyLockedDoor(nbt)) {
-            if (NbtHelper.toBlockPos(nbt.getCompound("DoorPosition")).equals(context.getBlockPos())) {
+            if (isRecordedDoor(context, nbt, otherHalfPos)) {
                 player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
-                world.setBlockState(context.getBlockPos(), hitBlock
-                        .with(Properties.LOCKED, false)
-                        .with(Properties.LOCKED, false)
-                );
+                unlockHalfDoor(context.getBlockPos(), world, hitBlock);
+                unlockHalfDoor(otherHalfPos, world, otherHalf);
                 forgetDoor(key);
             } else {
                 player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_door"), true);
             }
-        } else if (nbt == null) {
+        } else {
             player.sendMessage(new TranslatableText("item.mcrp.key_item.locking"), true);
-            world.setBlockState(context.getBlockPos(), hitBlock.with(Properties.LOCKED, true));
+            lockHalfDoor(context.getBlockPos(), world, hitBlock);
+            lockHalfDoor(otherHalfPos, world, otherHalf);
             this.writeNbt(world.getRegistryKey(), context.getBlockPos(), key.getOrCreateNbt());
         }
 
         return super.useOnBlock(context);
+    }
+
+    private void unlockHalfDoor(BlockPos pos, World world, BlockState hitBlock) {
+        world.setBlockState(
+                pos,
+                hitBlock.with(Properties.LOCKED, false).with(net.minecraft.state.property.Properties.LOCKED, false)
+        );
+    }
+
+    private void lockHalfDoor(BlockPos pos, World world, BlockState hitBlock) {
+        world.setBlockState(
+                pos,
+                hitBlock.with(Properties.LOCKED, true)
+        );
+    }
+
+    private boolean isRecordedDoor(ItemUsageContext context, NbtCompound nbt, BlockPos otherHalfPos) {
+        return NbtHelper.toBlockPos(nbt.getCompound("DoorPosition")).equals(context.getBlockPos()) || NbtHelper.toBlockPos(nbt.getCompound("DoorPosition")).equals(otherHalfPos);
     }
 
     private void writeNbt(RegistryKey<World> worldRegistryKey, BlockPos pos, NbtCompound nbtCompound) {
@@ -66,7 +89,10 @@ public class KeyItem extends Item {
     }
 
     private void forgetDoor(ItemStack key) {
-        key.setNbt(null);
+        if (key.getNbt() != null) {
+            key.getNbt().remove("DoorPosition");
+            key.getNbt().remove("DoorDimension");
+        }
     }
 
     private boolean isLockable(BlockState target) {
