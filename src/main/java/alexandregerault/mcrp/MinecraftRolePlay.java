@@ -11,7 +11,6 @@ public class MinecraftRolePlay implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        RegisterItems registerItems = new RegisterItems(new Log4JLogger(LOGGER));
-        registerItems.run();
+        new RegisterItems(new Log4JLogger(LOGGER)).run();
     }
 }
