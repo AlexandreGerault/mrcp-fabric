@@ -85,13 +85,6 @@ public class KeyItem extends Item {
                 .ifPresent(nbtElement -> nbtCompound.put("DoorDimension", nbtElement));
     }
 
-    private void forgetDoor(ItemStack key) {
-        if (key.getNbt() != null) {
-            key.getNbt().remove("DoorPosition");
-            key.getNbt().remove("DoorDimension");
-        }
-    }
-
     private boolean isLockable(BlockState target) {
         return target.isIn(TagKey.of(Registry.BLOCK_KEY, new Identifier(MinecraftRolePlay.MOD_ID, "lockable")));
     }
