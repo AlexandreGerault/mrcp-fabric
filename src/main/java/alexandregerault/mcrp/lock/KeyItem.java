@@ -47,7 +47,6 @@ public class KeyItem extends Item {
                 player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
                 unlockHalfDoor(context.getBlockPos(), world, hitBlock);
                 unlockHalfDoor(otherHalfPos, world, otherHalf);
-                forgetDoor(key);
             } else {
                 player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_door"), true);
             }
