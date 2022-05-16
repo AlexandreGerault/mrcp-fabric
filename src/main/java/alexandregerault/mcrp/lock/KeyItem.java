@@ -1,7 +1,6 @@
 package alexandregerault.mcrp.lock;
 
 import alexandregerault.mcrp.MinecraftRolePlay;
-import alexandregerault.mcrp.lock.mixin.MixinDoorBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +10,6 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;

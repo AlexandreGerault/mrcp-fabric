@@ -4,7 +4,6 @@ import alexandregerault.mcrp.MinecraftRolePlay;
 import alexandregerault.mcrp.lock.Properties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.StateManager;

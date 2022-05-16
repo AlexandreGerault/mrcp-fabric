@@ -1,6 +1,5 @@
 package alexandregerault.mcrp.item;
 
-import alexandregerault.mcrp.MinecraftRolePlay;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
