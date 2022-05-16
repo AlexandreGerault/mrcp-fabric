@@ -47,7 +47,6 @@ public abstract class MixinDoorBlock extends Block {
             Hand hand,
             BlockHitResult hit,
             CallbackInfoReturnable<ActionResult> cir) {
-        MinecraftRolePlay.LOGGER.info("Is locked? {}", state.get(LOCKED) ? "YES" : "NO");
         if (state.get(LOCKED)) {
             player.sendMessage(new TranslatableText("block.mcrp.door.locked"), true);
             cir.setReturnValue(ActionResult.PASS);
