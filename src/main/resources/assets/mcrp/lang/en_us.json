@@ -4,5 +4,6 @@
   "item.mcrp.key_item.locking": "Door locked successfully",
   "item.mcrp.key_item.unlocking": "Door unlocked successfully",
   "item.mcrp.key_item.wrong_door": "This key already locked another door",
-  "item.mcrp.legendary_sword_item": "Legendary Sword"
+  "item.mcrp.legendary_sword_item": "Legendary Sword",
+  "block.mcrp.door.locked": "This door is locked"
 }
