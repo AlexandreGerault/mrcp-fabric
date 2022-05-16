@@ -42,21 +42,35 @@ public class KeyItem extends Item {
                 : context.getBlockPos().offset(Direction.Axis.Y, 1);
         BlockState otherHalf = world.getBlockState(otherHalfPos);
 
-        if (nbt != null && hasAlreadyLockedDoor(nbt)) {
-            if (isRecordedDoor(context, nbt, otherHalfPos)) {
-                player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
-                unlockHalfDoor(context.getBlockPos(), world, hitBlock);
-                unlockHalfDoor(otherHalfPos, world, otherHalf);
-            } else {
-                player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_door"), true);
-            }
-        } else {
-            player.sendMessage(new TranslatableText("item.mcrp.key_item.locking"), true);
-            lockHalfDoor(context.getBlockPos(), world, hitBlock);
-            lockHalfDoor(otherHalfPos, world, otherHalf);
-            this.writeNbt(world.getRegistryKey(), context.getBlockPos(), key.getOrCreateNbt());
+        if (nbt == null) {
+            return lockDoor(context, world, hitBlock, key, player, otherHalfPos, otherHalf);
         }
 
+        if (!hasAlreadyLockedDoor(nbt)) {
+            return super.useOnBlock(context);
+        }
+
+        if (!hitBlock.get(Properties.LOCKED)) {
+            return lockDoor(context, world, hitBlock, key, player, otherHalfPos, otherHalf);
+        }
+
+        if (isRecordedDoor(context, nbt, otherHalfPos)) {
+            player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
+            unlockHalfDoor(context.getBlockPos(), world, hitBlock);
+            unlockHalfDoor(otherHalfPos, world, otherHalf);
+
+            return super.useOnBlock(context);
+        }
+
+        player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_door"), true);
+        return super.useOnBlock(context);
+    }
+
+    private ActionResult lockDoor(ItemUsageContext context, World world, BlockState hitBlock, ItemStack key, PlayerEntity player, BlockPos otherHalfPos, BlockState otherHalf) {
+        player.sendMessage(new TranslatableText("item.mcrp.key_item.locking"), true);
+        lockHalfDoor(context.getBlockPos(), world, hitBlock);
+        lockHalfDoor(otherHalfPos, world, otherHalf);
+        this.writeNbt(world.getRegistryKey(), context.getBlockPos(), key.getOrCreateNbt());
         return super.useOnBlock(context);
     }
 
