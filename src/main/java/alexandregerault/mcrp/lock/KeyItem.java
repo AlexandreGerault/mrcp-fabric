@@ -50,16 +50,16 @@ public class KeyItem extends Item {
             return super.useOnBlock(context);
         }
 
-        if (!hitBlock.get(Properties.LOCKED)) {
-            return lockDoor(context, world, hitBlock, key, player, otherHalfPos, otherHalf);
-        }
-
         if (isRecordedDoor(context, nbt, otherHalfPos)) {
-            player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
-            unlockHalfDoor(context.getBlockPos(), world, hitBlock);
-            unlockHalfDoor(otherHalfPos, world, otherHalf);
+            if (!hitBlock.get(Properties.LOCKED)) {
+                return lockDoor(context, world, hitBlock, key, player, otherHalfPos, otherHalf);
+            } else {
+                player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
+                unlockHalfDoor(context.getBlockPos(), world, hitBlock);
+                unlockHalfDoor(otherHalfPos, world, otherHalf);
 
-            return super.useOnBlock(context);
+                return super.useOnBlock(context);
+            }
         }
 
         player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_door"), true);
