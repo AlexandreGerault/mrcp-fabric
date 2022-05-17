@@ -68,7 +68,7 @@ public class KeyItem extends Item {
         player.sendMessage(new TranslatableText("item.mcrp.key_item.locking"), true);
         for (LockableBlockEntity blockEntity: blockEntities) {
             MinecraftRolePlay.LOGGER.info("Lock entity: {}", blockEntity.uuid());
-            lock(blockEntity);
+            blockEntity.lock();
         }
         this.writeNbt(key.getOrCreateNbt(), blockEntities);
         return super.useOnBlock(context);
@@ -78,18 +78,10 @@ public class KeyItem extends Item {
         player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
         for (LockableBlockEntity blockEntity: blockEntities) {
             MinecraftRolePlay.LOGGER.info("Unlock entity: {}", blockEntity.uuid());
-            unlock(blockEntity);
+            blockEntity.unlock();
         }
         this.writeNbt(key.getOrCreateNbt(), blockEntities);
         return super.useOnBlock(context);
-    }
-
-    private void unlock(LockableBlockEntity blockEntity) {
-        blockEntity.unlock();
-    }
-
-    private void lock(LockableBlockEntity blockEntity) {
-        blockEntity.lock();
     }
 
     private boolean isRecordedBlockEntity(NbtCompound nbt, LockableBlockEntity blockEntity) {

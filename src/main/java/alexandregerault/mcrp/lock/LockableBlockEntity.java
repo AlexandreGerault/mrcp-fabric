@@ -1,12 +1,15 @@
 package alexandregerault.mcrp.lock;
 
+import alexandregerault.mcrp.lock.mixin.MixinDoorBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -44,12 +47,22 @@ public class LockableBlockEntity extends BlockEntity {
     }
 
     public void lock() {
-        locked = true;
-        freeOfKey = false;
+        World world = getWorld();
+
+        if (world != null) {
+            world.setBlockState(this.pos, world.getBlockState(this.pos).with(Properties.LOCKED, true));
+            locked = true;
+            freeOfKey = false;
+        }
     }
 
     public void unlock() {
-        locked = false;
+        World world = getWorld();
+
+        if (world != null) {
+            world.setBlockState(this.pos, world.getBlockState(this.pos).with(Properties.LOCKED, false));
+            locked = false;
+        }
     }
 
     public boolean isLocked() {
