@@ -29,8 +29,8 @@ public class CornucopiaItem extends Item {
         user.getInventory().insertStack(target);
 
         cornucopia.damage(1, user, (u) -> {
-            u.sendMessage(new TranslatableText("item.mrcp.cornucopia_item.used", cornucopia.getName(), name), true);
-            u.sendMessage(new TranslatableText("item.mrcp.cornucopia_item.used", cornucopia.getName(), name), false);
+            u.sendMessage(new TranslatableText("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), true);
+            u.sendMessage(new TranslatableText("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), false);
         });
 
         return super.use(world, user, hand);
