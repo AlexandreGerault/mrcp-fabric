@@ -1,7 +1,6 @@
 package alexandregerault.mcrp.lock;
 
 import alexandregerault.mcrp.MinecraftRolePlay;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,7 +37,6 @@ public class KeyItem extends Item {
                 : world.getBlockEntity(context.getBlockPos().offset(Direction.Axis.Y, -1)));
 
         if (world.isClient || isNotLockable(blockEntity) || player == null || upperBlockEntity == null || lowerBlockEntity == null) {
-            MinecraftRolePlay.LOGGER.info("Something is null: {}, {}, {}, {}, {}", world.isClient, isNotLockable(blockEntity), player == null, upperBlockEntity == null, lowerBlockEntity == null);
             return super.useOnBlock(context);
         }
 
@@ -49,15 +47,12 @@ public class KeyItem extends Item {
             return lockDoor(context, key, player, upperBlockEntity, lowerBlockEntity);
         }
 
-        if (!hasAlreadyLockedDoor(nbt)) {
-            return super.useOnBlock(context);
-        }
-
         if (isRecordedBlockEntity(nbt, upperBlockEntity) && isRecordedBlockEntity(nbt, lowerBlockEntity)) {
-            MinecraftRolePlay.LOGGER.info("This is the recorded block entity");
             return upperBlockEntity.isLocked()
                     ? unlockDoor(context, key, player, upperBlockEntity, lowerBlockEntity)
                     : lockDoor(context, key, player, upperBlockEntity, lowerBlockEntity);
+        } else if (!hasAlreadyLockedDoor(nbt)) {
+            return lockDoor(context, key, player, upperBlockEntity, lowerBlockEntity);
         }
 
         player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_door"), true);
@@ -65,22 +60,45 @@ public class KeyItem extends Item {
     }
 
     private ActionResult lockDoor(ItemUsageContext context, ItemStack key, PlayerEntity player, LockableBlockEntity... blockEntities) {
-        player.sendMessage(new TranslatableText("item.mcrp.key_item.locking"), true);
-        for (LockableBlockEntity blockEntity: blockEntities) {
-            MinecraftRolePlay.LOGGER.info("Lock entity: {}", blockEntity.uuid());
-            blockEntity.lock();
+        NbtCompound nbt = key.getOrCreateNbt();
+
+        if (!nbt.contains("uuid")) {
+            UUID keyId = UUID.randomUUID();
+            nbt.putUuid("uuid", keyId);
         }
-        this.writeNbt(key.getOrCreateNbt(), blockEntities);
+
+        boolean shouldKeepProcessing = true;
+        for (LockableBlockEntity blockEntity : blockEntities) {
+            if (shouldKeepProcessing) {
+                shouldKeepProcessing = blockEntity.lock(nbt.getUuid("uuid"), player);
+            }
+        }
+
+        if (!shouldKeepProcessing) {
+            return super.useOnBlock(context);
+        }
+
+        this.writeNbt(nbt, blockEntities);
+        player.sendMessage(new TranslatableText("item.mcrp.key_item.locking"), true);
         return super.useOnBlock(context);
     }
 
     private ActionResult unlockDoor(ItemUsageContext context, ItemStack key, PlayerEntity player, LockableBlockEntity... blockEntities) {
-        player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
-        for (LockableBlockEntity blockEntity: blockEntities) {
-            MinecraftRolePlay.LOGGER.info("Unlock entity: {}", blockEntity.uuid());
-            blockEntity.unlock();
+        NbtCompound nbt = key.getOrCreateNbt();
+
+        boolean shouldKeepProcessing = true;
+        for (LockableBlockEntity blockEntity : blockEntities) {
+            if (shouldKeepProcessing) {
+                shouldKeepProcessing = blockEntity.unlock(nbt.getUuid("uuid"), player);
+            }
         }
-        this.writeNbt(key.getOrCreateNbt(), blockEntities);
+
+        if (!shouldKeepProcessing) {
+            return super.useOnBlock(context);
+        }
+
+        this.writeNbt(nbt, blockEntities);
+        player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
         return super.useOnBlock(context);
     }
 
@@ -99,7 +117,7 @@ public class KeyItem extends Item {
 
     private void writeNbt(NbtCompound nbtCompound, LockableBlockEntity... targets) {
         NbtList uuids = new NbtList();
-        for(LockableBlockEntity target: targets) {
+        for (LockableBlockEntity target : targets) {
             uuids.add(NbtHelper.fromUuid(target.uuid()));
         }
         nbtCompound.put("DoorUuids", uuids);

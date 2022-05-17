@@ -1,13 +1,16 @@
 package alexandregerault.mcrp.lock;
 
+import alexandregerault.mcrp.MinecraftRolePlay;
 import alexandregerault.mcrp.lock.mixin.MixinDoorBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -16,7 +19,9 @@ import java.util.UUID;
 
 public class LockableBlockEntity extends BlockEntity {
     private UUID uuid;
-    private boolean freeOfKey = true;
+
+    @Nullable
+    private UUID key = null;
     private boolean locked = false;
 
     public LockableBlockEntity(BlockPos pos, BlockState state) {
@@ -26,9 +31,11 @@ public class LockableBlockEntity extends BlockEntity {
 
     @Override
     public void writeNbt(NbtCompound tag) {
-        tag.putUuid("UUID", uuid);
-        tag.putBoolean("FreeOfKey", freeOfKey);
-        tag.putBoolean("Locked", locked);
+        tag.putUuid("uuid", uuid);
+        if (key != null) {
+            tag.putUuid("key", key);
+        }
+        tag.putBoolean("locked", locked);
 
         super.writeNbt(tag);
     }
@@ -37,32 +44,50 @@ public class LockableBlockEntity extends BlockEntity {
     public void readNbt(NbtCompound tag) {
         super.readNbt(tag);
 
-        uuid = tag.getUuid("UUID");
-        freeOfKey = tag.getBoolean("FreeOfKey");
-        locked = tag.getBoolean("Locked");
+        uuid = tag.getUuid("uuid");
+        if (tag.contains("key")) {
+            key = tag.getUuid("key");
+        }
+        locked = tag.getBoolean("locked");
     }
 
     public UUID uuid() {
         return uuid;
     }
 
-    public void lock() {
+    public boolean lock(UUID keyUuid, PlayerEntity player) {
         World world = getWorld();
+
+        MinecraftRolePlay.LOGGER.info("Key is not null? {} Are not equals? {}", key != null, !keyUuid.equals(key));
+
+        if (key != null && !keyUuid.equals(key)) {
+            player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_key"), true);
+            return false;
+        }
 
         if (world != null) {
             world.setBlockState(this.pos, world.getBlockState(this.pos).with(Properties.LOCKED, true));
             locked = true;
-            freeOfKey = false;
+            key = keyUuid;
         }
+
+        return true;
     }
 
-    public void unlock() {
+    public boolean unlock(UUID keyUuid, PlayerEntity player) {
         World world = getWorld();
+
+        if (key != null && !keyUuid.equals(key)) {
+            player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_key"), true);
+            return false;
+        }
 
         if (world != null) {
             world.setBlockState(this.pos, world.getBlockState(this.pos).with(Properties.LOCKED, false));
             locked = false;
         }
+
+        return true;
     }
 
     public boolean isLocked() {
