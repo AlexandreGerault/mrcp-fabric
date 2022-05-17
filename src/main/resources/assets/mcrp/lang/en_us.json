@@ -1,9 +1,11 @@
 {
-  "item.mrcp.cornucopia_item.used":  "You successfully used %1$s to duplicate %2$s",
+  "item.mrcp.cornucopia_item.used": "You successfully used %1$s to duplicate %2$s",
   "item.mcrp.cornucopia_item": "Cornucopia",
+  "item.mcrp.key_item": "Key",
   "item.mcrp.key_item.locking": "Door locked successfully",
   "item.mcrp.key_item.unlocking": "Door unlocked successfully",
   "item.mcrp.key_item.wrong_door": "This key already locked another door",
   "item.mcrp.legendary_sword_item": "Legendary Sword",
+  "block.mcrp.door.cannot_break": "This door is locked, thus cannot be broken",
   "block.mcrp.door.locked": "This door is locked"
 }
