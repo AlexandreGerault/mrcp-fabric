@@ -1,6 +1,5 @@
 package alexandregerault.mcrp.lock.mixin;
 
-import alexandregerault.mcrp.MinecraftRolePlay;
 import alexandregerault.mcrp.lock.LockableBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -26,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(DoorBlock.class)
 public abstract class MixinDoorBlock extends Block implements BlockEntityProvider {
     private static final BooleanProperty LOCKED = Properties.LOCKED;
+
     public MixinDoorBlock(Settings settings) {
         super(settings);
     }

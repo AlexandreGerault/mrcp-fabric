@@ -1,6 +1,5 @@
 package alexandregerault.mcrp.lock;
 
-import alexandregerault.mcrp.MinecraftRolePlay;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,7 +1,6 @@
 package alexandregerault.mcrp.lock;
 
 import alexandregerault.mcrp.MinecraftRolePlay;
-import alexandregerault.mcrp.lock.mixin.MixinDoorBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
