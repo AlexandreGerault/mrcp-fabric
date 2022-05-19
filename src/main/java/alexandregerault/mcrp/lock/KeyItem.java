@@ -28,6 +28,10 @@ public class KeyItem extends Item {
         BlockEntity blockEntity = world.getBlockEntity(context.getBlockPos());
         PlayerEntity player = context.getPlayer();
 
+        if (world.isClient || isNotLockable(blockEntity) || player == null) {
+            return super.useOnBlock(context);
+        }
+
         LockableBlockEntity upperBlockEntity = (LockableBlockEntity) (world.getBlockState(context.getBlockPos()).get(net.minecraft.state.property.Properties.DOUBLE_BLOCK_HALF).equals(DoubleBlockHalf.UPPER)
                 ? world.getBlockEntity(context.getBlockPos())
                 : world.getBlockEntity(context.getBlockPos().offset(Direction.Axis.Y, 1)));
@@ -35,7 +39,7 @@ public class KeyItem extends Item {
                 ? world.getBlockEntity(context.getBlockPos())
                 : world.getBlockEntity(context.getBlockPos().offset(Direction.Axis.Y, -1)));
 
-        if (world.isClient || isNotLockable(blockEntity) || player == null || upperBlockEntity == null || lowerBlockEntity == null) {
+        if (upperBlockEntity == null || lowerBlockEntity == null) {
             return super.useOnBlock(context);
         }
 
