@@ -1,6 +1,7 @@
 package alexandregerault.mcrp;
 
 import alexandregerault.mcrp.item.RegisterItems;
+import alexandregerault.mcrp.lock.Lock;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,7 @@ public class MinecraftRolePlay implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        RegisterItems registerItems = new RegisterItems(new Log4JLogger(LOGGER));
-        registerItems.run();
+        new RegisterItems(new Log4JLogger(LOGGER)).run();
+        new Lock().run();
     }
 }

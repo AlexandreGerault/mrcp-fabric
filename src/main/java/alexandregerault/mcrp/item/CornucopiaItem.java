@@ -1,6 +1,5 @@
 package alexandregerault.mcrp.item;
 
-import alexandregerault.mcrp.MinecraftRolePlay;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,8 +29,8 @@ public class CornucopiaItem extends Item {
         user.getInventory().insertStack(target);
 
         cornucopia.damage(1, user, (u) -> {
-            u.sendMessage(new TranslatableText("item.mrcp.cornucopia_item.used", cornucopia.getName(), name), true);
-            u.sendMessage(new TranslatableText("item.mrcp.cornucopia_item.used", cornucopia.getName(), name), false);
+            u.sendMessage(new TranslatableText("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), true);
+            u.sendMessage(new TranslatableText("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), false);
         });
 
         return super.use(world, user, hand);

@@ -10,11 +10,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class LegendarySwordItem extends SwordItem {
+    public static final float HEAL_RATIO = 0.25f;
+
     public LegendarySwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
-
-    public static final float HEAL_RATIO = 0.25f;
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
