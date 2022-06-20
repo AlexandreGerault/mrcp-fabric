@@ -4,7 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -29,8 +28,8 @@ public class CornucopiaItem extends Item {
         user.getInventory().insertStack(target);
 
         cornucopia.damage(1, user, (u) -> {
-            u.sendMessage(new TranslatableText("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), true);
-            u.sendMessage(new TranslatableText("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), false);
+            u.sendMessage(Text.translatable("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), true);
+            u.sendMessage(Text.translatable("item.mcrp.cornucopia_item.used", cornucopia.getName(), name), false);
         });
 
         return super.use(world, user, hand);

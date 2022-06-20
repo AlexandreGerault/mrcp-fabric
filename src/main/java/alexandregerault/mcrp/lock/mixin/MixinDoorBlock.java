@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -51,7 +51,7 @@ public abstract class MixinDoorBlock extends Block implements BlockEntityProvide
             CallbackInfoReturnable<ActionResult> cir
     ) {
         if (state.get(LOCKED)) {
-            player.sendMessage(new TranslatableText("block.mcrp.door.locked"), true);
+            player.sendMessage(Text.translatable("block.mcrp.door.locked"), true);
             cir.setReturnValue(ActionResult.PASS);
         }
     }

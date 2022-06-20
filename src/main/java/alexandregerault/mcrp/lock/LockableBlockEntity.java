@@ -9,7 +9,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -60,7 +60,7 @@ public class LockableBlockEntity extends BlockEntity {
         MinecraftRolePlay.LOGGER.info("Key is not null? {} Are not equals? {}", key != null, !keyUuid.equals(key));
 
         if (key != null && !keyUuid.equals(key)) {
-            player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_key"), true);
+            player.sendMessage(Text.translatable("item.mcrp.key_item.wrong_key"), true);
             return false;
         }
 
@@ -77,7 +77,7 @@ public class LockableBlockEntity extends BlockEntity {
         World world = getWorld();
 
         if (key != null && !keyUuid.equals(key)) {
-            player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_key"), true);
+            player.sendMessage(Text.translatable("item.mcrp.key_item.wrong_key"), true);
             return false;
         }
 

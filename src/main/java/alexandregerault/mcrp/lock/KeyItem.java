@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -58,7 +58,7 @@ public class KeyItem extends Item {
             return lockDoor(context, key, player, upperBlockEntity, lowerBlockEntity);
         }
 
-        player.sendMessage(new TranslatableText("item.mcrp.key_item.wrong_door"), true);
+        player.sendMessage(Text.translatable("item.mcrp.key_item.wrong_door"), true);
         return super.useOnBlock(context);
     }
 
@@ -82,7 +82,7 @@ public class KeyItem extends Item {
         }
 
         this.writeNbt(nbt, blockEntities);
-        player.sendMessage(new TranslatableText("item.mcrp.key_item.locking"), true);
+        player.sendMessage(Text.translatable("item.mcrp.key_item.locking"), true);
         return super.useOnBlock(context);
     }
 
@@ -101,7 +101,7 @@ public class KeyItem extends Item {
         }
 
         this.writeNbt(nbt, blockEntities);
-        player.sendMessage(new TranslatableText("item.mcrp.key_item.unlocking"), true);
+        player.sendMessage(Text.translatable("item.mcrp.key_item.unlocking"), true);
         return super.useOnBlock(context);
     }
 
